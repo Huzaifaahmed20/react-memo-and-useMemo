@@ -1,35 +1,64 @@
-import { useState, useMemo } from "react";
-import { Card, Button } from "./components";
+import { useReducer } from "react";
 import "./App.css";
+import { ACTION_TYPES, INITIAL_STATE, reducer } from "./reducer";
 
 function App() {
-  const [counter, setCounter] = useState(0);
-  const [number, setNumber] = useState(0);
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-  const squaredNumber = useMemo(() => {
-    return squareNum(number);
-  }, [number]);
+  const handleChange = (ev) => {
+    const inputName = ev.target.name;
+    const value = ev.target.value;
+
+    dispatch({
+      type: ACTION_TYPES.SET_USER,
+      payload: {
+        [inputName]: value,
+      },
+    });
+  };
+
+  const handleSubmit = () => {
+    console.log(state);
+  };
 
   return (
     <div className="App">
       <header className="App-header">
-        <Card title="LivDev" description="Subscribe Now!" />
-        <br />
-        <input onChange={(e) => setNumber(e.target.value)} />
-        <p>SQUARE: {squaredNumber}</p>
         <div>
-          <Button title="-" onClick={() => setCounter(counter - 1)} />
-          <span>{counter}</span>
-          <Button title="+" onClick={() => setCounter(counter + 1)} />
+          <label htmlFor="fname">First Name</label>
+          <input
+            onChange={handleChange}
+            type="text"
+            id="fname"
+            name="firstName"
+          />
         </div>
+        <div>
+          <label htmlFor="lname">Last Name</label>
+          <input
+            onChange={handleChange}
+            type="text"
+            id="lname"
+            name="lastName"
+          />
+        </div>
+        <div>
+          <label htmlFor="age">Age</label>
+          <input onChange={handleChange} type="number" id="age" name="age" />
+        </div>
+        <div>
+          <label htmlFor="experience">Experience (years)</label>
+          <input
+            onChange={handleChange}
+            type="number"
+            id="experience"
+            name="experience"
+          />
+        </div>
+        <button onClick={handleSubmit}>Submit</button>
       </header>
     </div>
   );
-}
-
-function squareNum(number) {
-  console.log("Square function called");
-  return Math.pow(number, 2);
 }
 
 export default App;
